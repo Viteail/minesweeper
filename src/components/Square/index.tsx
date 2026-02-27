@@ -5,6 +5,6 @@ interface ISquareProps {
 }
 
 export const Square: React.FC<ISquareProps> = (props) => {
-  const { handleClick } = props;
+  const { handleClick} = props;
   return <div className={classes.square} onClick={handleClick}></div>;
 };

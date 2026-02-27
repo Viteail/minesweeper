@@ -18,19 +18,31 @@ function App() {
   const [squares, setSquares] = useState<Square[]>([]);
   const [isFirstSquareClicked, setIsFirstSquareClicked] = useState(false);
 
-  const plantBombs = () => {
+  const plantBombs = (clickedSquareIndex: number) => {
     const bombsAmount = Math.round(squares.length * 0.15);
 
     const tempSquares = [...squares];
+    let randomSquareIndex;
 
     for (let i = 0; i < bombsAmount; i++) {
-      const randomNumber = Math.floor(Math.random() * squares.length);
-      tempSquares[randomNumber].isBomb = true;
+      do {
+        const randomNumber = Math.floor(Math.random() * squares.length);
+        randomSquareIndex = randomNumber;
+      } while (randomSquareIndex === clickedSquareIndex);
+
+      tempSquares[randomSquareIndex].isBomb = true;
     }
 
-    console.log("e", tempSquares);
     setSquares(tempSquares);
   };
+
+  const getNearbySquarePositions = (squareIndex) => {
+
+  }
+
+  const updateSquareNearbyBombs = () => {
+
+  }
 
   const handleClickMenuButton = (value: number) => {
     setSizeGrid(value);
@@ -50,10 +62,10 @@ function App() {
     setSquares(tempSquares);
   };
 
-  const handleClickSquare = () => {
-    console.log("click nahoy");
+  const handleClickSquare = (clickedSquareIndex: number) => {
+    console.log("click nahoy", clickedSquareIndex);
     if (!isFirstSquareClicked) {
-      plantBombs();
+      plantBombs(clickedSquareIndex);
       setIsFirstSquareClicked(true);
     }
   };

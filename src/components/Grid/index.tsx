@@ -3,7 +3,7 @@ import classes from "./grid.module.css";
 
 interface IGridProps {
   size: number;
-  handleClickSquare: () => void;
+  handleClickSquare: (arg0: number) => void;
 }
 
 export const Grid: React.FC<IGridProps> = (props) => {
@@ -14,7 +14,7 @@ export const Grid: React.FC<IGridProps> = (props) => {
   return (
     <div className={`${classes.grid} ${classes[`size-${size}`]}`}>
       {squares.map((squares, index) => (
-        <Square handleClick={() => handleClickSquare()} key={index} />
+        <Square handleClick={() => handleClickSquare(index)} key={index} />
       ))}
     </div>
   );
