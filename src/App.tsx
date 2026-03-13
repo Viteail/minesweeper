@@ -4,73 +4,162 @@ import { Grid, Menu } from "./components";
 
 import { useState } from "react";
 
-type Square = {
-  index: number;
+type TCoords = {
+  col: number;
+  row: number;
+};
+
+export type TSquare = {
   isBomb: boolean;
-  nearBombs: number | undefined;
+  nearBombs: number;
   isClicked: boolean;
+  coords: TCoords;
+};
+
+export type TGrid = {
+  cols: number;
+  rows: number;
 };
 
 function App() {
   const [switchToGrid, setSwitchToGrid] = useState(false);
-  const [sizeGrid, setSizeGrid] = useState<number | null>(null);
+  const [gridSize, setGridSize] = useState<TGrid | null>(null);
 
-  const [squares, setSquares] = useState<Square[]>([]);
+  const [squares, setSquares] = useState<TSquare[]>([]);
   const [isFirstSquareClicked, setIsFirstSquareClicked] = useState(false);
 
-  const plantBombs = (clickedSquareIndex: number) => {
-    const bombsAmount = Math.round(squares.length * 0.15);
+  const isSamePostion = (firstCoords: TCoords, secondCoords: TCoords) =>
+    firstCoords.col === secondCoords.col &&
+    firstCoords.row === secondCoords.row;
+
+  const updateSquareNearbyBombs = (squares: TSquare[]) => {
+    for (let i = 0; i < squares.length; i++) {
+      if (squares[i].isBomb) continue;
+      const nearbySquares = getNearbySquares(squares[i].coords);
+      nearbySquares.forEach((square) => {
+        if (square.isBomb) squares[i].nearBombs += 1;
+      });
+    }
+  };
+
+  const plantBombs = (clickedSquare: TSquare) => {
+    const bombsAmount = Math.round(squares.length * 0.2);
 
     const tempSquares = [...squares];
-    let randomSquareIndex;
+    let randomCoords: TCoords;
 
     for (let i = 0; i < bombsAmount; i++) {
       do {
-        const randomNumber = Math.floor(Math.random() * squares.length);
-        randomSquareIndex = randomNumber;
-      } while (randomSquareIndex === clickedSquareIndex);
+        const randomCol = Math.floor(Math.random() * gridSize!.cols);
+        const randomRow = Math.floor(Math.random() * gridSize!.rows);
 
-      tempSquares[randomSquareIndex].isBomb = true;
+        randomCoords = { col: randomCol, row: randomRow };
+      } while (isSamePostion(randomCoords, clickedSquare.coords));
+
+      const randomSquare = tempSquares.find(({ coords }) =>
+        isSamePostion(coords, randomCoords),
+      );
+
+      randomSquare!.isBomb = true;
     }
+
+    updateSquareNearbyBombs(tempSquares);
 
     setSquares(tempSquares);
   };
 
-  const getNearbySquarePositions = (squareIndex) => {
+  const isOutOfBounds = (coord: TCoords) => {
+    if (
+      coord.col < 0 ||
+      coord.col >= gridSize!.cols ||
+      coord.row < 0 ||
+      coord.row >= gridSize!.rows
+    )
+      return true;
+    return false;
+  };
 
-  }
+  const getNearbySquares = (coords: TCoords) => {
+    const nearbySquares: TSquare[] = [];
+    const nearbyCoords: TCoords[] = [];
 
-  const updateSquareNearbyBombs = () => {
+    const upLeft = { col: coords.col - 1, row: coords.row - 1 };
+    if (!isOutOfBounds(upLeft)) nearbyCoords.push(upLeft);
 
-  }
+    const up = { col: coords.col, row: coords.row - 1 };
+    if (!isOutOfBounds(up)) nearbyCoords.push(up);
 
-  const handleClickMenuButton = (value: number) => {
-    setSizeGrid(value);
+    const upRight = { col: coords.col + 1, row: coords.row - 1 };
+    if (!isOutOfBounds(upRight)) nearbyCoords.push(upRight);
+
+    const left = { col: coords.col - 1, row: coords.row };
+    if (!isOutOfBounds(left)) nearbyCoords.push(left);
+
+    const right = { col: coords.col + 1, row: coords.row };
+    if (!isOutOfBounds(right)) nearbyCoords.push(right);
+
+    const downLeft = { col: coords.col - 1, row: coords.row + 1 };
+    if (!isOutOfBounds(downLeft)) nearbyCoords.push(downLeft);
+
+    const down = { col: coords.col, row: coords.row + 1 };
+    if (!isOutOfBounds(down)) nearbyCoords.push(down);
+
+    const downRight = { col: coords.col + 1, row: coords.row + 1 };
+    if (!isOutOfBounds(downRight)) nearbyCoords.push(downRight);
+
+    for (let i = 0; i < nearbyCoords.length; i++) {
+      const foundSquare = squares.find(({ coords }) =>
+        isSamePostion(coords, nearbyCoords[i]),
+      );
+
+      if (foundSquare) nearbySquares.push(foundSquare);
+    }
+
+    return nearbySquares;
+  };
+
+  const displayBombsNearby = () => {};
+
+  const handleClickMenuButton = (value: TGrid) => {
+    setGridSize(value);
     setSwitchToGrid(true);
 
-    const squaresAmount = value * value;
+    const tempSquares = [];
 
-    const tempSquares = Array.from({ length: squaresAmount }, (_, index) => ({
-      index: index,
-      isBomb: false,
-      nearBombs: 0,
-      isClicked: false,
-    }));
+    for (let i = 0; i < value.rows; i++) {
+      for (let j = 0; j < value.cols; j++) {
+        tempSquares.push({
+          isBomb: false,
+          nearBombs: 0,
+          isClicked: false,
+          coords: { col: j, row: i },
+        });
+      }
+    }
 
-    console.log(tempSquares, sizeGrid);
+    console.log(tempSquares, gridSize);
 
     setSquares(tempSquares);
   };
 
-  const handleClickSquare = (clickedSquareIndex: number) => {
-    console.log("click nahoy", clickedSquareIndex);
+  const handleClickSquare = (clickedSquare: TSquare) => {
+    console.log("click nahoy", clickedSquare);
+    const tempSquares = [...squares];
     if (!isFirstSquareClicked) {
-      plantBombs(clickedSquareIndex);
+      plantBombs(clickedSquare);
       setIsFirstSquareClicked(true);
     }
+    const tempSquare = tempSquares.find(({ coords }) =>
+      isSamePostion(coords, clickedSquare.coords),
+    );
+    console.log(tempSquare);
+    tempSquare!.isClicked = true;
+    console.log(getNearbySquares(clickedSquare.coords));
+
+    setSquares(tempSquares);
   };
 
-  console.log(sizeGrid, switchToGrid, squares);
+  console.log(gridSize, switchToGrid, squares);
 
   return (
     <div>
@@ -78,7 +167,8 @@ function App() {
       {switchToGrid && (
         <Grid
           handleClickSquare={handleClickSquare}
-          size={sizeGrid as number}
+          gridSize={gridSize as TGrid}
+          squares={squares}
         ></Grid>
       )}
     </div>

@@ -1,20 +1,21 @@
 import { Square } from "../Square";
 import classes from "./grid.module.css";
 
+import type { TGrid, TSquare } from "../../App";
+
 interface IGridProps {
-  size: number;
-  handleClickSquare: (arg0: number) => void;
+  gridSize: TGrid;
+  handleClickSquare: (arg0: TSquare) => void;
+  squares: TSquare[];
 }
 
 export const Grid: React.FC<IGridProps> = (props) => {
-  const { size, handleClickSquare } = props;
-
-  const squares = Array.from({ length: size * size }, (_, index) => index);
+  const { gridSize, handleClickSquare, squares } = props;
 
   return (
-    <div className={`${classes.grid} ${classes[`size-${size}`]}`}>
-      {squares.map((squares, index) => (
-        <Square handleClick={() => handleClickSquare(index)} key={index} />
+    <div className={`${classes.grid} ${classes[`size-${gridSize.cols}`]}`}>
+      {squares.map((square, index) => (
+        <Square handleClick={() => handleClickSquare(square)} key={index} />
       ))}
     </div>
   );
