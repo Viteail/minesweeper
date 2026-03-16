@@ -13,6 +13,7 @@ export type TSquare = {
   isBomb: boolean;
   nearBombs: number;
   isClicked: boolean;
+  isFlagged: boolean;
   coords: TCoords;
 };
 
@@ -36,8 +37,8 @@ function App() {
     for (let i = 0; i < squares.length; i++) {
       if (squares[i].isBomb) continue;
       const nearbySquares = getNearbySquares(squares[i].coords);
-      nearbySquares.forEach((square) => {
-        if (square.isBomb) squares[i].nearBombs += 1;
+      nearbySquares.forEach((nearbySquare) => {
+        if (nearbySquare.isBomb) squares[i].nearBombs += 1;
       });
     }
   };
@@ -118,7 +119,38 @@ function App() {
     return nearbySquares;
   };
 
-  const displayBombsNearby = () => {};
+  const revealNearbyBombs = (square: TSquare) => {
+    const tempSquares = [...squares];
+    const squaresToBeRevealed = [square];
+
+    do {
+      const tempSquaresToBeRevealed = [
+        ...squaresToBeRevealed.filter(
+          (squareToBeRevealed) => !squareToBeRevealed.isClicked,
+        ),
+      ];
+      console.log("coaie", tempSquaresToBeRevealed);
+      squaresToBeRevealed.splice(0, squaresToBeRevealed.length);
+
+      for (let i = 0; i < tempSquaresToBeRevealed.length; i++) {
+        if (
+          !tempSquaresToBeRevealed[i].nearBombs &&
+          !tempSquaresToBeRevealed.some((tempSquare) => tempSquare.isBomb)
+        ) {
+          squaresToBeRevealed.push(
+            ...getNearbySquares(tempSquaresToBeRevealed[i].coords),
+          );
+        }
+        const foundSquare = squares.find(({ coords }) =>
+          isSamePostion(coords, tempSquaresToBeRevealed[i].coords),
+        );
+        console.log(foundSquare);
+        foundSquare!.isClicked = true;
+      }
+    } while (squaresToBeRevealed.length);
+
+    setSquares(tempSquares);
+  };
 
   const handleClickMenuButton = (value: TGrid) => {
     setGridSize(value);
@@ -132,31 +164,22 @@ function App() {
           isBomb: false,
           nearBombs: 0,
           isClicked: false,
+          isFlagged: false,
           coords: { col: j, row: i },
         });
       }
     }
-
-    console.log(tempSquares, gridSize);
 
     setSquares(tempSquares);
   };
 
   const handleClickSquare = (clickedSquare: TSquare) => {
     console.log("click nahoy", clickedSquare);
-    const tempSquares = [...squares];
     if (!isFirstSquareClicked) {
       plantBombs(clickedSquare);
       setIsFirstSquareClicked(true);
     }
-    const tempSquare = tempSquares.find(({ coords }) =>
-      isSamePostion(coords, clickedSquare.coords),
-    );
-    console.log(tempSquare);
-    tempSquare!.isClicked = true;
-    console.log(getNearbySquares(clickedSquare.coords));
-
-    setSquares(tempSquares);
+    revealNearbyBombs(clickedSquare);
   };
 
   console.log(gridSize, switchToGrid, squares);

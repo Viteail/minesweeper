@@ -13,10 +13,3 @@
 .size-20 {
   grid-template-columns: repeat(20, 1fr);
 }
-
-.square {
-  height: 50px;
-  width: 50px;
-  border: 1px solid black;
-  background-color: white;
-}

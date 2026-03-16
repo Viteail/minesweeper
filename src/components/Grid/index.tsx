@@ -15,7 +15,13 @@ export const Grid: React.FC<IGridProps> = (props) => {
   return (
     <div className={`${classes.grid} ${classes[`size-${gridSize.cols}`]}`}>
       {squares.map((square, index) => (
-        <Square handleClick={() => handleClickSquare(square)} key={index} />
+        <Square
+          isEmpty={square.isClicked}
+          handleClick={() => handleClickSquare(square)}
+          key={index}
+        >
+          {square.isClicked && square.nearBombs !== 0 && square.nearBombs}
+        </Square>
       ))}
     </div>
   );
