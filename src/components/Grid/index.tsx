@@ -6,21 +6,30 @@ import type { TGrid, TSquare } from "../../App";
 interface IGridProps {
   gridSize: TGrid;
   handleClickSquare: (arg0: TSquare) => void;
+  handleRightClickSquare: (
+    arg0: React.MouseEvent<HTMLDivElement>,
+    arg1: TSquare,
+  ) => void;
   squares: TSquare[];
 }
 
 export const Grid: React.FC<IGridProps> = (props) => {
-  const { gridSize, handleClickSquare, squares } = props;
+  const { gridSize, handleClickSquare, handleRightClickSquare, squares } =
+    props;
 
   return (
     <div className={`${classes.grid} ${classes[`size-${gridSize.cols}`]}`}>
       {squares.map((square, index) => (
         <Square
           isEmpty={square.isClicked}
+          handleRightClick={(e: React.MouseEvent<HTMLDivElement>) =>
+            handleRightClickSquare(e, square)
+          }
           handleClick={() => handleClickSquare(square)}
           key={index}
         >
           {square.isClicked && square.nearBombs !== 0 && square.nearBombs}
+          {square.isFlagged && "F"}
         </Square>
       ))}
     </div>

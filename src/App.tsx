@@ -173,12 +173,32 @@ function App() {
     setSquares(tempSquares);
   };
 
+  const handleRightClickSquare = (
+    event: React.MouseEvent<HTMLDivElement>,
+    clickedSquare: TSquare,
+  ) => {
+    event.preventDefault();
+
+    if (clickedSquare.isClicked) return;
+
+    const tempSquares = [...squares];
+    const foundSquare = tempSquares.find(({ coords }) =>
+      isSamePostion(coords, clickedSquare.coords),
+    );
+
+    if (!foundSquare!.isFlagged) foundSquare!.isFlagged = true;
+    else foundSquare!.isFlagged = false;
+
+    setSquares(tempSquares);
+  };
+
   const handleClickSquare = (clickedSquare: TSquare) => {
     console.log("click nahoy", clickedSquare);
     if (!isFirstSquareClicked) {
       plantBombs(clickedSquare);
       setIsFirstSquareClicked(true);
     }
+    if (clickedSquare.isClicked || clickedSquare.isFlagged) return;
     revealNearbyBombs(clickedSquare);
   };
 
@@ -189,6 +209,7 @@ function App() {
       <Menu handleClick={handleClickMenuButton}></Menu>
       {switchToGrid && (
         <Grid
+          handleRightClickSquare={handleRightClickSquare}
           handleClickSquare={handleClickSquare}
           gridSize={gridSize as TGrid}
           squares={squares}
