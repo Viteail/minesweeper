@@ -34,14 +34,12 @@ function App() {
 
   const [revealBombs, setRevealBombs] = useState(false);
 
-  const restartGame = () => {
+  const resetGame = () => {
     setSquares([]);
     setIsFirstSquareClicked(false);
     setIsWon(false);
     setIsLost(false);
     setRevealBombs(false);
-
-    startGame(gridSize!);
   };
 
   const isSamePostion = (firstCoords: TCoords, secondCoords: TCoords) =>
@@ -191,6 +189,8 @@ function App() {
       setSwitchToGrid(true);
     }
 
+    if (squares.length) resetGame();
+
     const tempSquares = [];
 
     for (let i = 0; i < value.rows; i++) {
@@ -250,10 +250,14 @@ function App() {
     <div>
       <Menu handleClick={startGame}></Menu>
       {isWon && (
-        <ResultMenu handleClickRestart={restartGame}>YOU WON GGEZ!</ResultMenu>
+        <ResultMenu handleClickRestart={() => startGame(gridSize!)}>
+          YOU WON GGEZ!
+        </ResultMenu>
       )}
       {isLost && (
-        <ResultMenu handleClickRestart={restartGame}>You lost.</ResultMenu>
+        <ResultMenu handleClickRestart={() => startGame(gridSize!)}>
+          You lost.
+        </ResultMenu>
       )}
       {switchToGrid && (
         <Grid
