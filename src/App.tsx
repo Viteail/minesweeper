@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { Grid, Menu } from "./components";
+import { Grid, Menu, ResultMenu } from "./components";
 
 import { useState } from "react";
 
@@ -29,6 +29,21 @@ function App() {
   const [squares, setSquares] = useState<TSquare[]>([]);
   const [isFirstSquareClicked, setIsFirstSquareClicked] = useState(false);
 
+  const [isWon, setIsWon] = useState(false);
+  const [isLost, setIsLost] = useState(false);
+
+  const [revealBombs, setRevealBombs] = useState(false);
+
+  const restartGame = () => {
+    setSquares([]);
+    setIsFirstSquareClicked(false);
+    setIsWon(false);
+    setIsLost(false);
+    setRevealBombs(false);
+
+    startGame(gridSize!);
+  };
+
   const isSamePostion = (firstCoords: TCoords, secondCoords: TCoords) =>
     firstCoords.col === secondCoords.col &&
     firstCoords.row === secondCoords.row;
@@ -41,6 +56,24 @@ function App() {
         if (nearbySquare.isBomb) squares[i].nearBombs += 1;
       });
     }
+  };
+
+  const isWinCondition = () => {
+    const nonBombSquares = squares.filter((square) => !square.isBomb);
+    const isEverySquareRevealed = nonBombSquares.every(
+      (square) => square.isClicked,
+    );
+
+    if (isEverySquareRevealed) return true;
+    return false;
+  };
+
+  const isLoseCondition = () => {
+    const bombSquares = squares.filter((square) => square.isBomb);
+    const isAnyBombClicked = bombSquares.some((square) => square.isClicked);
+
+    if (isAnyBombClicked) return true;
+    return false;
   };
 
   const plantBombs = (clickedSquare: TSquare) => {
@@ -152,9 +185,11 @@ function App() {
     setSquares(tempSquares);
   };
 
-  const handleClickMenuButton = (value: TGrid) => {
-    setGridSize(value);
-    setSwitchToGrid(true);
+  const startGame = (value: TGrid) => {
+    if (gridSize !== value) {
+      setGridSize(value);
+      setSwitchToGrid(true);
+    }
 
     const tempSquares = [];
 
@@ -179,7 +214,7 @@ function App() {
   ) => {
     event.preventDefault();
 
-    if (clickedSquare.isClicked) return;
+    if (clickedSquare.isClicked || isWon || isLost) return;
 
     const tempSquares = [...squares];
     const foundSquare = tempSquares.find(({ coords }) =>
@@ -198,21 +233,35 @@ function App() {
       plantBombs(clickedSquare);
       setIsFirstSquareClicked(true);
     }
-    if (clickedSquare.isClicked || clickedSquare.isFlagged) return;
+    if (clickedSquare.isClicked || clickedSquare.isFlagged || isWon || isLost)
+      return;
     revealNearbyBombs(clickedSquare);
+
+    if (isWinCondition()) setIsWon(true);
+    if (isLoseCondition()) {
+      setIsLost(true);
+      setRevealBombs(true);
+    }
   };
 
   console.log(gridSize, switchToGrid, squares);
 
   return (
     <div>
-      <Menu handleClick={handleClickMenuButton}></Menu>
+      <Menu handleClick={startGame}></Menu>
+      {isWon && (
+        <ResultMenu handleClickRestart={restartGame}>YOU WON GGEZ!</ResultMenu>
+      )}
+      {isLost && (
+        <ResultMenu handleClickRestart={restartGame}>You lost.</ResultMenu>
+      )}
       {switchToGrid && (
         <Grid
           handleRightClickSquare={handleRightClickSquare}
           handleClickSquare={handleClickSquare}
           gridSize={gridSize as TGrid}
           squares={squares}
+          revealBombs={revealBombs}
         ></Grid>
       )}
     </div>

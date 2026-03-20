@@ -11,11 +11,17 @@ interface IGridProps {
     arg1: TSquare,
   ) => void;
   squares: TSquare[];
+  revealBombs: boolean;
 }
 
 export const Grid: React.FC<IGridProps> = (props) => {
-  const { gridSize, handleClickSquare, handleRightClickSquare, squares } =
-    props;
+  const {
+    gridSize,
+    handleClickSquare,
+    handleRightClickSquare,
+    squares,
+    revealBombs,
+  } = props;
 
   return (
     <div className={`${classes.grid} ${classes[`size-${gridSize.cols}`]}`}>
@@ -30,6 +36,7 @@ export const Grid: React.FC<IGridProps> = (props) => {
         >
           {square.isClicked && square.nearBombs !== 0 && square.nearBombs}
           {square.isFlagged && "F"}
+          {revealBombs && square.isBomb && "B"}
         </Square>
       ))}
     </div>
