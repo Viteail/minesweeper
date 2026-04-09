@@ -1,5 +1,7 @@
 .grid {
   display: grid;
+  -webkit-user-select: none; /* Safari */
+  user-select: none;
 }
 
 .size-8 {

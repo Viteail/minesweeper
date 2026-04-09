@@ -2,7 +2,7 @@ import classes from "./square.module.css";
 
 interface ISquareProps {
   handleClick: () => void;
-  handleRightClick: (arg0: React.MouseEvent<HTMLDivElement>) => void;
+  handleRightClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   children: React.ReactNode;
   isEmpty: boolean;
 }

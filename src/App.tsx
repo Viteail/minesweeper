@@ -150,6 +150,16 @@ function App() {
     return nearbySquares;
   };
 
+  const isFlagMatchBomb = (clickedSquare: TSquare) => {
+    const nearbySquares = getNearbySquares(clickedSquare.coords);
+
+    let nearbyFlags = 0;
+    nearbySquares.forEach((square) => square.isFlagged && nearbyFlags++);
+
+    if (nearbyFlags === clickedSquare.nearBombs) return true;
+    return false;
+  };
+
   const revealNearbyBombs = (square: TSquare) => {
     const tempSquares = [...squares];
     const squaresToBeRevealed = [square];
@@ -160,7 +170,6 @@ function App() {
           (squareToBeRevealed) => !squareToBeRevealed.isClicked,
         ),
       ];
-      console.log("coaie", tempSquaresToBeRevealed);
       squaresToBeRevealed.splice(0, squaresToBeRevealed.length);
 
       for (let i = 0; i < tempSquaresToBeRevealed.length; i++) {
@@ -172,13 +181,30 @@ function App() {
             ...getNearbySquares(tempSquaresToBeRevealed[i].coords),
           );
         }
-        const foundSquare = squares.find(({ coords }) =>
+        const foundSquare = tempSquares.find(({ coords }) =>
           isSamePostion(coords, tempSquaresToBeRevealed[i].coords),
         );
-        console.log(foundSquare);
         foundSquare!.isClicked = true;
+        foundSquare!.isFlagged = false;
       }
     } while (squaresToBeRevealed.length);
+
+    setSquares(tempSquares);
+  };
+
+  const revealUnflaggedSquares = (clickedSquare: TSquare) => {
+    const tempSquares = [...squares];
+
+    const nearbyUnflaggedSquares = getNearbySquares(
+      clickedSquare.coords,
+    ).filter((square) => !square.isFlagged);
+
+    nearbyUnflaggedSquares.forEach((unflaggedSquare) => {
+      const foundSquare = tempSquares.find(({ coords }) =>
+        isSamePostion(coords, unflaggedSquare.coords),
+      );
+      if (foundSquare) revealNearbyBombs(foundSquare);
+    });
 
     setSquares(tempSquares);
   };
@@ -228,14 +254,16 @@ function App() {
   };
 
   const handleClickSquare = (clickedSquare: TSquare) => {
-    console.log("click nahoy", clickedSquare);
     if (!isFirstSquareClicked) {
       plantBombs(clickedSquare);
       setIsFirstSquareClicked(true);
     }
-    if (clickedSquare.isClicked || clickedSquare.isFlagged || isWon || isLost)
-      return;
-    revealNearbyBombs(clickedSquare);
+    if (clickedSquare.isFlagged || isWon || isLost) return;
+
+    if (isFlagMatchBomb(clickedSquare) && clickedSquare.isClicked)
+      revealUnflaggedSquares(clickedSquare);
+
+    if (!clickedSquare.isClicked) revealNearbyBombs(clickedSquare);
 
     if (isWinCondition()) setIsWon(true);
     if (isLoseCondition()) {
@@ -243,8 +271,6 @@ function App() {
       setRevealBombs(true);
     }
   };
-
-  console.log(gridSize, switchToGrid, squares);
 
   return (
     <div>

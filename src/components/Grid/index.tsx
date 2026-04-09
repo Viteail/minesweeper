@@ -7,8 +7,8 @@ interface IGridProps {
   gridSize: TGrid;
   handleClickSquare: (arg0: TSquare) => void;
   handleRightClickSquare: (
-    arg0: React.MouseEvent<HTMLDivElement>,
-    arg1: TSquare,
+    e: React.MouseEvent<HTMLDivElement>,
+    square: TSquare,
   ) => void;
   squares: TSquare[];
   revealBombs: boolean;
@@ -28,7 +28,7 @@ export const Grid: React.FC<IGridProps> = (props) => {
       {squares.map((square, index) => (
         <Square
           isEmpty={square.isClicked}
-          handleRightClick={(e: React.MouseEvent<HTMLDivElement>) =>
+          handleRightClick={(e) =>
             handleRightClickSquare(e, square)
           }
           handleClick={() => handleClickSquare(square)}
