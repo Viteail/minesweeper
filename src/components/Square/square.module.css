@@ -3,7 +3,7 @@
   align-content: center;
   height: 30px;
   width: 30px;
-  background-color: #CCCCCC;
+  background-color: #cccccc;
   border-top: 2px solid white;
   border-left: 2px solid white;
   border-bottom: 2px solid gray;
@@ -12,5 +12,37 @@
 }
 
 .isEmpty {
-  border: 2px solid #CCCCCC;
+  border: 2px solid #cccccc;
+}
+
+.one {
+  color: var(--one);
+}
+
+.two {
+  color: var(--two);
+}
+
+.three {
+  color: var(--three);
+}
+
+.four {
+  color: var(--four);
+}
+
+.five {
+  color: var(--five);
+}
+
+.six {
+  color: var(--six);
+}
+
+.seven {
+  color: var(--seven);
+}
+
+.eight {
+  color: var(--eight);
 }

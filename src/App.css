@@ -3,6 +3,15 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
+  --one: #0000ff;
+  --two: #008000;
+  --three: #ff0000;
+  --four: #00008b;
+  --five: #ff1493;
+  --six: #00ffff;
+  --seven: #000000;
+  --eight: #808080;
 }
 
 .logo {
