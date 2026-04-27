@@ -1,5 +1,9 @@
-import { Square } from "../Square";
 import classes from "./grid.module.css";
+
+import { Square } from "../Square";
+import { Icon } from "../Icon";
+
+import flagIcon from "../../assets/flag.svg";
 
 import type { TGrid, TSquare } from "../../App";
 
@@ -23,6 +27,12 @@ export const Grid: React.FC<IGridProps> = (props) => {
     revealBombs,
   } = props;
 
+  const renderContent = (square: TSquare) => {
+    if (square.isClicked && square.nearBombs !== 0) return square.nearBombs;
+    if (square.isFlagged) return <Icon src={flagIcon} alt="Flag" />;
+    if (revealBombs && square.isBomb) return "B";
+  };
+
   return (
     <div className={`${classes.grid} ${classes[`size-${gridSize.cols}`]}`}>
       {squares.map((square, index) => (
@@ -33,9 +43,7 @@ export const Grid: React.FC<IGridProps> = (props) => {
           nearBombs={square.nearBombs}
           key={index}
         >
-          {square.isClicked && square.nearBombs !== 0 && square.nearBombs}
-          {square.isFlagged && "F"}
-          {revealBombs && square.isBomb && "B"}
+          {renderContent(square)}
         </Square>
       ))}
     </div>
