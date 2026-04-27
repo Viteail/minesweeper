@@ -3,16 +3,20 @@
   align-content: center;
   height: 30px;
   width: 30px;
-  background-color: #cccccc;
-  border-top: 2px solid white;
-  border-left: 2px solid white;
-  border-bottom: 2px solid gray;
-  border-right: 2px solid gray;
+  background-color: var(--square-bg-color);
+  border-top: 2px solid var(--square-top-left-color);
+  border-left: 2px solid var(--square-top-left-color);
+  border-bottom: 2px solid var(--square-bottom-right-color);
+  border-right: 2px solid var(--square-bottom-right-color);
   color: black;
 }
 
 .isEmpty {
-  border: 2px solid #cccccc;
+  background-color: var(--empty-square-bg-color);
+  border-top: 2px solid var(--empty-square-top-left-color);
+  border-left: 2px solid var(--empty-square-top-left-color);
+  border-bottom: 2px solid var(--empty-square-bottom-right-color);
+  border-right: 2px solid var(--empty-square-bottom-right-color);
 }
 
 .one {

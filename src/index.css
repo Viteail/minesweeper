@@ -4,22 +4,40 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  --one: #60A5FA;
+  --two: #4ADE80;
+  --three: #FB7185;
+  --four: #A78BFA;
+  --five: #FACC15;
+  --six: #2DD4BF;
+  --seven: #E879F9;
+  --eight: #94A3B8;
+
+  --bg-color: #242424;
+
+  --square-bg-color: #2d3e50;
+  --square-top-left-color: #4a6b8a;
+  --square-bottom-right-color: #1a222d;
+
+  --empty-square-bg-color: #1a222f;
+  --empty-square-top-left-color: #0f172a;
+  --empty-square-bottom-right-color: #2d3e50;
+
+  --slate-200: oklch(92.9% 0.013 255.508);
+  --slate-300: oklch(86.9% 0.022 252.894);
+  --slate-400: oklch(70.4% 0.04 256.788);
+  --slate-500: oklch(55.4% 0.046 257.417);
+  --slate-600: oklch(44.6% 0.043 257.281);
+  --slate-800: oklch(27.9% 0.041 260.031);
+  --slate-700: oklch(37.2% 0.044 257.287);
+  --slate-900: oklch(20.8% 0.042 265.755);
 }
 
 body {
@@ -28,41 +46,4 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

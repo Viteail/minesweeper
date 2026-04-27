@@ -1,0 +1,32 @@
+.modal-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 10px;
+  gap: 40px;
+  width: 400px;
+  height: 300px;
+  border-radius: 5px;
+  border: 1px solid var(--slate-600);
+  background-color: var(--slate-800);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.btns-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btns-container {
+  display: flex;
+  gap: 10px;
+}
+
+.custom-btn-container {
+
+}

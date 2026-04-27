@@ -1,3 +1,5 @@
+import classes from "./button.module.css";
+
 interface IButtonProps {
   onClick: () => void;
   children: React.ReactNode;
@@ -8,7 +10,7 @@ export const Button: React.FC<IButtonProps> = (props) => {
 
   return (
     <>
-      <button onClick={onClick}>{children}</button>
+      <button className={classes.button} onClick={onClick}>{children}</button>
     </>
   );
 };

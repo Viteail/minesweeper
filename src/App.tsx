@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { Grid, Menu, ResultMenu } from "./components";
+import { Grid, Modal, ModalMenu, ResultMenu } from "./components";
 
 import { useState } from "react";
 
@@ -274,7 +274,11 @@ function App() {
 
   return (
     <div>
-      <Menu handleClick={startGame}></Menu>
+      {!gridSize && (
+        <Modal>
+          <ModalMenu handleClick={startGame} />
+        </Modal>
+      )}
       {isWon && (
         <ResultMenu handleClickRestart={() => startGame(gridSize!)}>
           YOU WON GGEZ!
