@@ -4,6 +4,7 @@ import { Square } from "../Square";
 import { Icon } from "../Icon";
 
 import flagIcon from "../../assets/flag.svg";
+import explosionIcon from "../../assets/explosion.svg";
 
 import type { TGrid, TSquare } from "../../App";
 
@@ -30,7 +31,7 @@ export const Grid: React.FC<IGridProps> = (props) => {
   const renderContent = (square: TSquare) => {
     if (square.isClicked && square.nearBombs !== 0) return square.nearBombs;
     if (square.isFlagged) return <Icon src={flagIcon} alt="Flag" />;
-    if (revealBombs && square.isBomb) return "B";
+    if (revealBombs && square.isBomb) return <Icon src={explosionIcon} alt="Bomb" />;
   };
 
   return (

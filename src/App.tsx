@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { Grid, Modal, ModalMenu, ResultMenu } from "./components";
+import { Grid, Modal, ModalMenu, ResultMenu, GameHeader } from "./components";
 
 import { useState } from "react";
 
@@ -33,6 +33,8 @@ function App() {
   const [isLost, setIsLost] = useState(false);
 
   const [revealBombs, setRevealBombs] = useState(false);
+
+  const [bestScore, setBestScore] = useState(0);
 
   const resetGame = () => {
     setSquares([]);
@@ -272,6 +274,8 @@ function App() {
     }
   };
 
+  const updateBestScore = (time) => setBestScore(time);
+
   return (
     <div>
       {!gridSize && (
@@ -290,13 +294,21 @@ function App() {
         </ResultMenu>
       )}
       {switchToGrid && (
-        <Grid
-          handleRightClickSquare={handleRightClickSquare}
-          handleClickSquare={handleClickSquare}
-          gridSize={gridSize as TGrid}
-          squares={squares}
-          revealBombs={revealBombs}
-        ></Grid>
+        <>
+          <GameHeader
+            isLost={isLost}
+            isWon={isWon}
+            updateBestScore={updateBestScore}
+            bestScore={bestScore}
+          ></GameHeader>
+          <Grid
+            handleRightClickSquare={handleRightClickSquare}
+            handleClickSquare={handleClickSquare}
+            gridSize={gridSize as TGrid}
+            squares={squares}
+            revealBombs={revealBombs}
+          ></Grid>
+        </>
       )}
     </div>
   );
