@@ -2,7 +2,7 @@ import classes from "./modalMenu.module.css";
 
 import { Button } from "../Button";
 
-import type { TGrid } from "../../App";
+import type { TGrid } from "../../types/minesweeper.ts";
 
 interface IModalMenuProps {
   handleClick: (value: TGrid) => void;

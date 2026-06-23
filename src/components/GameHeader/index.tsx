@@ -1,34 +1,22 @@
-import { useEffect, useState } from "react";
+import classes from "./gameHeader.module.css";
+
+import { Button } from "../Button";
 
 interface IGameHeaderProps {
-  isWon: boolean;
-  isLost: boolean;
-  updateBestScore: (time: number) => void;
   bestScore: number;
+  time: number;
 }
 
 export const GameHeader: React.FC<IGameHeaderProps> = (props) => {
-  const [time, setTime] = useState(0);
-
-  const { isWon, isLost, updateBestScore, bestScore } = props;
-
-  useEffect(() => {
-    if (isWon || isLost) {
-      updateBestScore(time);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setTime((prev) => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isWon, isLost]);
+  const { bestScore, time } = props;
 
   return (
-    <div>
+    <div className={classes.header}>
       <div>Time: {time}s</div>
       <div>Best Time: {bestScore}s</div>
+      <div>
+        <Button>Go back</Button>
+      </div>
     </div>
   );
 };
