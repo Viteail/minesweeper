@@ -11,3 +11,12 @@
 .button:hover {
   background-color: var(--slate-500);
 }
+
+.icon {
+  padding: 10px;
+}
+
+.icon > * {
+  width: 20px;
+  height: 20px;
+}

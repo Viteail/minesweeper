@@ -24,7 +24,7 @@ export const useMinesweeper = () => {
     return () => clearInterval(interval);
   }, [isWon, isLost, switchToGrid]);
 
-  const resetGame = () => {
+  const resetBoard = () => {
     setSquares([]);
     setIsFirstSquareClicked(false);
     setIsWon(false);
@@ -190,7 +190,7 @@ export const useMinesweeper = () => {
       setSwitchToGrid(true);
     }
 
-    if (squares.length) resetGame();
+    if (squares.length) resetBoard();
 
     const tempSquares = [];
 
@@ -260,6 +260,13 @@ export const useMinesweeper = () => {
     resetTimer();
   };
 
+  const handleReturnMenu = () => {
+    setGridSize(null);
+    setSwitchToGrid(false);
+    resetBoard();
+    resetTimer();
+  };
+
   return {
     gridSize,
     switchToGrid,
@@ -272,5 +279,6 @@ export const useMinesweeper = () => {
     startGame,
     handleClickSquare,
     handleRightClickSquare,
+    handleReturnMenu,
   };
 };

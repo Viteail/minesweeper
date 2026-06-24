@@ -18,6 +18,7 @@ function App() {
     startGame,
     handleClickSquare,
     handleRightClickSquare,
+    handleReturnMenu,
   } = useMinesweeper();
 
   return (
@@ -39,7 +40,11 @@ function App() {
       )}
       {switchToGrid && (
         <>
-          <GameHeader bestScore={bestScore} time={time}></GameHeader>
+          <GameHeader
+            handleReturnMenu={handleReturnMenu}
+            bestScore={bestScore}
+            time={time}
+          ></GameHeader>
           <Grid
             handleRightClickSquare={handleRightClickSquare}
             handleClickSquare={handleClickSquare}
